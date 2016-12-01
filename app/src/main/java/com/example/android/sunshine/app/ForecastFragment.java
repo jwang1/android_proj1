@@ -1,14 +1,21 @@
 package com.example.android.sunshine.app;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.fragment.*;
 import android.support.v4.app.Fragment;
+import android.support.v7.appcompat.*;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -29,6 +36,31 @@ public class ForecastFragment extends Fragment {
 //  private static final String LOGTAG = ForecastFragment.class.getSimpleName();
 
   public ForecastFragment() {
+  }
+
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    // this fragment handling events
+    setHasOptionsMenu(true);
+  }
+
+  @Override
+  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    inflater.inflate(R.menu.forecastfragment, menu);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    int id = item.getItemId();
+
+    if (id == R.id.action_refresh) {
+      Toast.makeText(getActivity(), "You just click Refresh menu", Toast.LENGTH_SHORT).show();
+      return true;
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   @Override
@@ -67,11 +99,20 @@ public class ForecastFragment extends Fragment {
     private final String LOGTAG = FetchWeatherTask.class.getSimpleName();
     private String weatherResponse;
 
+
     @Override
     protected Object doInBackground(Object[] objects) {
 
       try {
-        URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=cambridge,us&cnt=7");
+        String city = "94043";
+        String urlBase = "http://api.openweathermap.org/data/2.5/forecast/daily?q=" + city + "&mode=json&units=metric&cnt=7";
+
+        // OPEN_WEATHER_MAP_API_KEY defined in build.gradle ;  points to the value in $HOME/.gradle/gradle.properties
+        // http://stackoverflow.com/questions/27382236/buildconfig-file-in-android-purpose-and-possibilities
+        // need to build first, otherwise not able to see the intended BuildConfig class.
+        String apiKey = "&APPID=" + BuildConfig.OPEN_WEATHER_MAP_API_KEY;
+
+        URL url = new URL(urlBase + apiKey);
 
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
