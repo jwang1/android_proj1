@@ -1,12 +1,8 @@
 package com.example.android.sunshine.app;
 
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
-import android.support.fragment.*;
 import android.support.v4.app.Fragment;
-import android.support.v7.appcompat.*;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,13 +14,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.android.sunshine.app.util.ForecastJsonParser;
+
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +35,7 @@ import java.util.List;
 public class ForecastFragment extends Fragment {
 
 //  private static final String LOGTAG = ForecastFragment.class.getSimpleName();
+  private ListView forecastListView;
 
   public ForecastFragment() {
   }
@@ -66,34 +67,18 @@ public class ForecastFragment extends Fragment {
     return super.onOptionsItemSelected(item);
   }
 
+  List<String> weatherData = new ArrayList<>();
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
 
-    List<String> weatherData = Arrays.asList(
-        "Today -- Sunny - 88/63",
-        "Tomorrow -- Foggy - 70/46",
-        "Wed -- Cloudy - 72/63",
-        "Thur -- Rainy - 64/51",
-        "Fri -- Foggy - 70/46",
-        "Sat -- Sunny - 76/68"
-    );
-
-
-
-    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-        getActivity(),
-        R.layout.list_item_forecast,
-        R.id.list_item_forecast_textview,
-        weatherData
-    );
-
-
-
     View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-    ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
-    listView.setAdapter(adapter);
+    forecastListView = (ListView) rootView.findViewById(R.id.listview_forecast);
+
+    FetchWeatherTask task = new FetchWeatherTask();
+    task.execute();
 
     return rootView;
   }
@@ -104,14 +89,24 @@ public class ForecastFragment extends Fragment {
 
     @Override
     protected void onProgressUpdate(Object[] objects) {
-      Toast.makeText(getActivity(), "calling OpenWeatherMap ...", Toast.LENGTH_LONG);
+      Toast.makeText(getActivity(), "calling OpenWeatherMap ...", Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onPostExecute(Object object) {
       // calling Json parser to handle results
-      Toast.makeText(getActivity(), "COMPLETE http call ...", Toast.LENGTH_LONG);
-      Toast.makeText(getActivity(), weatherResponse.toString(), Toast.LENGTH_LONG);
+      // Toast.makeText(getActivity(), "COMPLETE http call ...", Toast.LENGTH_LONG).show();
+      Toast.makeText(getActivity(), weatherResponse.toString(), Toast.LENGTH_LONG).show();
+
+      // update Adapter data
+      try {
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview,
+            ForecastJsonParser.getWeatherDataFromJson(weatherResponse));
+        forecastListView.setAdapter(arrayAdapter);
+      } catch (JSONException e) {
+        e.printStackTrace();
+        Log.e(LOGTAG, e.getMessage());
+      }
     }
 
 
@@ -147,6 +142,7 @@ public class ForecastFragment extends Fragment {
         Log.w(LOGTAG, "data read from openweathermap : " + sb.toString());
 
         weatherResponse = sb.toString();
+
 
       } catch (MalformedURLException e) {
         e.printStackTrace();
