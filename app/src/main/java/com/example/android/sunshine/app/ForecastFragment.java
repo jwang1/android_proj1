@@ -3,6 +3,7 @@ package com.example.android.sunshine.app;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.fragment.*;
 import android.support.v4.app.Fragment;
 import android.support.v7.appcompat.*;
@@ -100,6 +101,18 @@ public class ForecastFragment extends Fragment {
   public class FetchWeatherTask extends AsyncTask {
     private final String LOGTAG = FetchWeatherTask.class.getSimpleName();
     private String weatherResponse;
+
+    @Override
+    protected void onProgressUpdate(Object[] objects) {
+      Toast.makeText(getActivity(), "calling OpenWeatherMap ...", Toast.LENGTH_LONG);
+    }
+
+    @Override
+    protected void onPostExecute(Object object) {
+      // calling Json parser to handle results
+      Toast.makeText(getActivity(), "COMPLETE http call ...", Toast.LENGTH_LONG);
+      Toast.makeText(getActivity(), weatherResponse.toString(), Toast.LENGTH_LONG);
+    }
 
 
     @Override
