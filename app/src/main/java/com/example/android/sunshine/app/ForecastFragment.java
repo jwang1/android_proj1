@@ -96,7 +96,10 @@ public class ForecastFragment extends Fragment {
     protected void onPostExecute(Object object) {
       // calling Json parser to handle results
       // Toast.makeText(getActivity(), "COMPLETE http call ...", Toast.LENGTH_LONG).show();
-      Toast.makeText(getActivity(), weatherResponse.toString(), Toast.LENGTH_LONG).show();
+
+
+      // debugging message on Toast
+      //Toast.makeText(getActivity(), weatherResponse.toString(), Toast.LENGTH_LONG).show();
 
       // update Adapter data
       try {
