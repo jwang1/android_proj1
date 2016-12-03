@@ -58,6 +58,8 @@ public class ForecastFragment extends Fragment {
 
     if (id == R.id.action_refresh) {
       Toast.makeText(getActivity(), "You just click Refresh menu", Toast.LENGTH_SHORT).show();
+      FetchWeatherTask task = new FetchWeatherTask();
+      task.execute();
       return true;
     }
     return super.onOptionsItemSelected(item);
@@ -135,9 +137,14 @@ public class ForecastFragment extends Fragment {
 
       } catch (MalformedURLException e) {
         e.printStackTrace();
+        Log.e(LOGTAG, e.getMessage());
       } catch (Exception e) {
         e.printStackTrace();
+        Log.e(LOGTAG, e.getMessage());
       }
+
+
+      Log.i(LOGTAG, "response: " + weatherResponse);
 
       return weatherResponse;
     }
