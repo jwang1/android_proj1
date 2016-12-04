@@ -1,5 +1,6 @@
 package com.example.android.sunshine.app;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,8 +25,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * forecast fragment containing a simple view.
@@ -34,8 +33,10 @@ import java.util.List;
  */
 public class ForecastFragment extends Fragment {
 
-//  private static final String LOGTAG = ForecastFragment.class.getSimpleName();
+  //private static final String LOGTAG = ForecastFragment.class.getSimpleName();
   private ListView forecastListView;
+
+  private String city;
 
   public ForecastFragment() {
   }
@@ -58,16 +59,16 @@ public class ForecastFragment extends Fragment {
   public boolean onOptionsItemSelected(MenuItem item) {
     int id = item.getItemId();
 
+
     if (id == R.id.action_refresh) {
       Toast.makeText(getActivity(), "You just click Refresh menu", Toast.LENGTH_SHORT).show();
       FetchWeatherTask task = new FetchWeatherTask();
-      task.execute();
+      task.execute(city);
       return true;
     }
     return super.onOptionsItemSelected(item);
   }
 
-  List<String> weatherData = new ArrayList<>();
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,25 +76,27 @@ public class ForecastFragment extends Fragment {
 
     View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
+    city = "25588";
+
     forecastListView = (ListView) rootView.findViewById(R.id.listview_forecast);
 
     FetchWeatherTask task = new FetchWeatherTask();
-    task.execute();
+    task.execute(city);
 
     return rootView;
   }
 
-  public class FetchWeatherTask extends AsyncTask {
+  public class FetchWeatherTask extends AsyncTask<String, Void, String> {
     private final String LOGTAG = FetchWeatherTask.class.getSimpleName();
     private String weatherResponse;
 
     @Override
-    protected void onProgressUpdate(Object[] objects) {
+    protected void onProgressUpdate(Void... progress) {
       Toast.makeText(getActivity(), "calling OpenWeatherMap ...", Toast.LENGTH_LONG).show();
     }
 
     @Override
-    protected void onPostExecute(Object object) {
+    protected void onPostExecute(String result) {
       // calling Json parser to handle results
       // Toast.makeText(getActivity(), "COMPLETE http call ...", Toast.LENGTH_LONG).show();
 
@@ -114,18 +117,29 @@ public class ForecastFragment extends Fragment {
 
 
     @Override
-    protected Object doInBackground(Object[] objects) {
+    protected String doInBackground(String... params) {
 
       try {
         String city = "94043";
-        String urlBase = "http://api.openweathermap.org/data/2.5/forecast/daily?q=" + city + "&mode=json&units=metric&cnt=7";
+        int numDays = 7;
+        String urlBase = "http://api.openweathermap.org/data/2.5/forecast/daily?";
 
         // OPEN_WEATHER_MAP_API_KEY defined in build.gradle ;  points to the value in $HOME/.gradle/gradle.properties
         // http://stackoverflow.com/questions/27382236/buildconfig-file-in-android-purpose-and-possibilities
         // need to build first, otherwise not able to see the intended BuildConfig class.
-        String apiKey = "&APPID=" + BuildConfig.OPEN_WEATHER_MAP_API_KEY;
+        //String apiKey = "&APPID=" + BuildConfig.OPEN_WEATHER_MAP_API_KEY;
 
-        URL url = new URL(urlBase + apiKey);
+        Uri builtUri = Uri.parse(urlBase).buildUpon()
+            .appendQueryParameter("q", params[0])
+            .appendQueryParameter("mode", "json")
+            .appendQueryParameter("units", "metric")
+            .appendQueryParameter("cnt", Integer.toString(numDays))
+            .appendQueryParameter("APPID", BuildConfig.OPEN_WEATHER_MAP_API_KEY)
+            .build();
+
+        URL url = new URL(builtUri.toString());
+
+        Log.v(LOGTAG, "built URI : " + builtUri.toString());
 
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
