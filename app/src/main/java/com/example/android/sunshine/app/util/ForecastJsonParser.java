@@ -1,5 +1,7 @@
 package com.example.android.sunshine.app.util;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,15 +27,21 @@ public class ForecastJsonParser {
   public final static String MIN = "min";
   public final static String NUM_DAYS = "cnt";
 
+  private final static String LOGTAG = ForecastJsonParser.class.getSimpleName();
+
   private final static String DATE_FORMAT = "EEE MMM dd";
 
-  private static String getDate(long milliSeconds, String dateFormat) {
+  private static String getDate(long seconds, String dateFormat) {
     SimpleDateFormat format = new SimpleDateFormat(dateFormat);
 
+    /* the following is a long way to get answer */
     //Calendar calendar = Calendar.getInstance();
-    //calendar.setTimeInMillis(milliSeconds);
+    //calendar.setTimeInMillis(seconds * 1000);
     //return format.format(calendar.getTime());
-    return format.format(milliSeconds);
+    //Log.w(LOGTAG, "date time : " + format.format(calendar.getTime()) + " from : " + seconds);
+    //Log.v(LOGTAG, "date time 2: " + calendar.get(Calendar.DAY_OF_WEEK) + " " + calendar.get(Calendar.MONTH) + " " + calendar.get(Calendar.DAY_OF_MONTH));
+
+    return format.format(seconds * 1000);
   }
 
   private static String getWeatherDescription(JSONArray descriptionArray) throws JSONException {
