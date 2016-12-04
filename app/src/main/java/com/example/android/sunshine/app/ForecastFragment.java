@@ -43,6 +43,7 @@ public class ForecastFragment extends Fragment {
   private TextView cityTextView;
 
   private String city;
+  private String tempUnit;
 
   public ForecastFragment() {
   }
@@ -84,6 +85,7 @@ public class ForecastFragment extends Fragment {
 
     //city = "25588";
     city = "Boston";
+    tempUnit = "metric";
 
     // This code, using user's setting preference, was from the idea of
     // https://developer.android.com/guide/topics/ui/settings.html  (reading preferences)
@@ -91,6 +93,7 @@ public class ForecastFragment extends Fragment {
     // by calling static method.  Hence did the following; and we default to "Boston" the above.
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
     city = sharedPreferences.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+    tempUnit = sharedPreferences.getString(getString(R.string.pref_temperature_key), getString(R.string.pref_temperature_default));
 
     forecastListView = (ListView) rootView.findViewById(R.id.listview_forecast);
     cityTextView = (TextView) rootView.findViewById(R.id.textView_city);
@@ -166,7 +169,7 @@ public class ForecastFragment extends Fragment {
         Uri builtUri = Uri.parse(urlBase).buildUpon()
             .appendQueryParameter("q", params[0])
             .appendQueryParameter("mode", "json")
-            .appendQueryParameter("units", "metric")
+            .appendQueryParameter("units", tempUnit)
             .appendQueryParameter("cnt", Integer.toString(numDays))
             .appendQueryParameter("APPID", BuildConfig.OPEN_WEATHER_MAP_API_KEY)
             .build();

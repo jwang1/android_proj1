@@ -8,6 +8,11 @@
         android:title="@string/pref_header_location"/>
 
     <header
+        android:fragment="com.example.android.sunshine.app.SettingsActivity$TemperaturePreferenceFragment"
+        android:icon="@drawable/ic_info_black_24dp"
+        android:title="@string/pref_header_temperature"/>
+
+    <header
         android:fragment="com.example.android.sunshine.app.SettingsActivity$GeneralPreferenceFragment"
         android:icon="@drawable/ic_info_black_24dp"
         android:title="@string/pref_header_general"/>
