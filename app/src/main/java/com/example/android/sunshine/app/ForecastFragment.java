@@ -78,13 +78,19 @@ public class ForecastFragment extends Fragment {
 
     View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-    city = "25588";
+    //city = "25588";
+    city = "Boston";
 
     forecastListView = (ListView) rootView.findViewById(R.id.listview_forecast);
     cityTextView = (TextView) rootView.findViewById(R.id.textView_city);
 
     FetchWeatherTask task = new FetchWeatherTask();
     task.execute(city);
+
+    forecastListView.setOnItemClickListener((adapterView, view, i, l) -> {
+      Toast.makeText(getActivity(), "item clicked", Toast.LENGTH_SHORT).show();
+      DetailActivity detailActivity = new DetailActivity();
+    });
 
     return rootView;
   }
