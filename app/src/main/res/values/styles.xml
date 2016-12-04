@@ -5,13 +5,20 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="city_textview_style" parent="Widget.AppCompat.ListView">
+    <style name="city_textview_style" parent="Widget.AppCompat.Light.AutoCompleteTextView">
         <item name="android:textAlignment">center</item>
         <item name="android:layout_gravity">top</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/forecast_city_textview_height</item>
         <item name="android:text">Location</item>
+    </style>
+
+    <style name="forecast_listview_style" parent="Widget.AppCompat.ListView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/forecast_listview_height</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@color/forecast_listview_backgroup</item>
     </style>
 
 </resources>

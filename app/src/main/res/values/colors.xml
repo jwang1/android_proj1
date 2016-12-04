@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="forecast_listview_backgroup">@android:color/holo_orange_light</color>
+</resources>
