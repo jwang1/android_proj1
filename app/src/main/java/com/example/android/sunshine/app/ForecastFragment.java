@@ -1,5 +1,6 @@
 package com.example.android.sunshine.app;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -89,7 +90,9 @@ public class ForecastFragment extends Fragment {
 
     forecastListView.setOnItemClickListener((adapterView, view, i, l) -> {
       Toast.makeText(getActivity(), "item clicked", Toast.LENGTH_SHORT).show();
-      DetailActivity detailActivity = new DetailActivity();
+      //DetailActivity detailActivity = new DetailActivity();  // wrong way, need to use Intent as shown in below
+      Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
+      startActivity(detailIntent);
     });
 
     return rootView;
