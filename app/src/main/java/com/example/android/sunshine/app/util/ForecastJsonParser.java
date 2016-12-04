@@ -96,10 +96,12 @@ public class ForecastJsonParser {
       // Description
       forecastStr.append(getWeatherDescription(daily.getJSONArray(WEATHER)));
 
-      forecastStr.append(" - ");
+      forecastStr.append(" ( ");
 
       // Min/Max
       forecastStr.append(getTemperature(daily.getJSONObject(TEMPERATURE)));
+
+      forecastStr.append(" ) ");
 
       results.add(forecastStr.toString());
     }
