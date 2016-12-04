@@ -1,9 +1,11 @@
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -81,6 +83,13 @@ public class ForecastFragment extends Fragment {
 
     //city = "25588";
     city = "Boston";
+
+    // This code, using user's setting preference, was from the idea of
+    // https://developer.android.com/guide/topics/ui/settings.html  (reading preferences)
+    // mentioning "preferences are saved to a file that is accessible from ANYWHERE within the application
+    // by calling static method.  Hence did the following; and we default to "Boston" the above.
+    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+    city = sharedPreferences.getString(getString(R.string.pref_location_key), city);
 
     forecastListView = (ListView) rootView.findViewById(R.id.listview_forecast);
     cityTextView = (TextView) rootView.findViewById(R.id.textView_city);
