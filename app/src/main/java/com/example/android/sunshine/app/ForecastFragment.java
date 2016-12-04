@@ -72,10 +72,41 @@ public class ForecastFragment extends Fragment {
       FetchWeatherTask task = new FetchWeatherTask();
       task.execute(city);
       return true;
+    } else if (id == R.id.action_view_preferred_location) {
+
+      // using google.streetview with coordinates here, not accurate as the one of "geo:0.0?q" type
+      showMap(Uri.parse(ForecastJsonParser.GOOGLE_MAP_URI_PREFIX + ForecastJsonParser.getLonLat()));
+      return true;
     }
     return super.onOptionsItemSelected(item);
   }
 
+  public void showMap(Uri geoLocation) {
+    /*
+    Intent intent = new Intent(Intent.ACTION_VIEW, geoLocation);
+    intent.setPackage(ForecastJsonParser.GOOGLE_MAP_PACKAGE);
+    intent.setData(geoLocation);
+    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+      startActivity(intent);
+    }
+    */
+
+    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+    String loc = sharedPreferences.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+    Uri geoLoc = Uri.parse("geo:0,0?")
+        .buildUpon()
+        .appendQueryParameter("q", loc)
+        .build();
+
+    Intent intent1 = new Intent(Intent.ACTION_VIEW);
+    intent1.setData(geoLoc);
+    if (intent1.resolveActivity(getActivity().getPackageManager()) != null) {
+      startActivity(intent1);
+    } else {
+      Toast.makeText(getActivity(), "couldn't view location: " + geoLocation.toString() + ", no receiving apps installed", Toast.LENGTH_LONG)
+      .show();
+    }
+  }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,

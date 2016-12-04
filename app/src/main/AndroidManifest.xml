@@ -5,6 +5,17 @@
     <!-- http://stackoverflow.com/questions/2378607/what-permission-do-i-need-to-access-internet-from-an-android-application -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!-- tried the following when viewing-location return "No Activity found for this Intent"
+         BUT, it turned OUT,  not the permission; BUT, "Location" on Phone was turned OFF.
+
+         Once "location" turned ON on phone, no exception anymore.
+         -->
+    <!--
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+    -->
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -15,7 +26,6 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>

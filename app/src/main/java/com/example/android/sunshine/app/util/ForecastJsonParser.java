@@ -29,10 +29,18 @@ public class ForecastJsonParser {
   public final static String CITY = "city";
   public final static String CITY_NAME = "name";
   public final static String COUNTRY_NAME = "country";
+  public final static String COORD = "coord";
+  public final static String LON = "lon";
+  public final static String LAT = "lat";
+  public final static String GOOGLE_MAP_URI_PREFIX = "google.streetview:cbll=";
+  public final static String GOOGLE_MAP_PACKAGE = "com.google.android:apps.maps";
 
   private final static String LOGTAG = ForecastJsonParser.class.getSimpleName();
 
   private final static String DATE_FORMAT = "EEE MMM dd";
+
+  private static String city;
+  private static String lonLat;
 
   private static String getDate(long seconds, String dateFormat) {
     SimpleDateFormat format = new SimpleDateFormat(dateFormat);
@@ -84,6 +92,15 @@ public class ForecastJsonParser {
     JSONObject weatherData = new JSONObject(forecastJsonStr);
     JSONArray weatherArray = weatherData.getJSONArray(LIST);
 
+    // populate CITY
+    JSONObject cityObj = weatherData.getJSONObject(CITY);
+    city = cityObj.getString(CITY_NAME) + ", " + cityObj.getString(COUNTRY_NAME);
+
+    // populate Coordinate (lonLat)
+    JSONObject coordObj = cityObj.getJSONObject(COORD);
+    lonLat = coordObj.getString(LON) + ", " + coordObj.getString(LAT);
+
+    // populate numDays Forecast string
     for(int i=0; i < weatherArray.length(); i++) {
       JSONObject daily = weatherArray.getJSONObject(i);
       StringBuilder forecastStr = new StringBuilder();
@@ -107,6 +124,20 @@ public class ForecastJsonParser {
     }
 
     return results;
+  }
+
+  public static String getCity() {
+    if (city == null) {
+      return "Boston";
+    }
+    return city;
+  }
+
+  public static String getLonLat() {
+    if (lonLat == null) {
+      return -71.059769 + ", 42.358429";
+    }
+    return lonLat;
   }
 
   public static String getCity(String weatherResponse) throws JSONException {
