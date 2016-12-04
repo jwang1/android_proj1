@@ -81,6 +81,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
       } else {
         // For all other preferences, set the summary to the value's
         // simple string representation.
+
+        // JWANG: for "location", it's here, need to make sure this works.
         preference.setSummary(stringValue);
       }
       return true;
@@ -183,6 +185,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
+
+      // JWANG:  since this SettingsActivity.java was created via IDE
+      //         comment where the 'preference' on Settings UI coming from;  this pref_general.xml file
       addPreferencesFromResource(R.xml.pref_general);
       setHasOptionsMenu(true);
 
@@ -192,6 +197,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
       // guidelines.
       bindPreferenceSummaryToValue(findPreference("example_text"));
       bindPreferenceSummaryToValue(findPreference("example_list"));
+
+      // JWANG: for the location binding
+      bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
     }
 
     @Override
