@@ -26,6 +26,9 @@ public class ForecastJsonParser {
   public final static String MAX = "max";
   public final static String MIN = "min";
   public final static String NUM_DAYS = "cnt";
+  public final static String CITY = "city";
+  public final static String CITY_NAME = "name";
+  public final static String COUNTRY_NAME = "country";
 
   private final static String LOGTAG = ForecastJsonParser.class.getSimpleName();
 
@@ -102,6 +105,18 @@ public class ForecastJsonParser {
     }
 
     return results;
+  }
+
+  public static String getCity(String weatherResponse) throws JSONException {
+    JSONObject json = new JSONObject(weatherResponse);
+    JSONObject city = json.getJSONObject(CITY);
+    StringBuilder sb = new StringBuilder();
+
+    sb.append(city.getString(CITY_NAME))
+        .append(", ")
+        .append(city.getString(COUNTRY_NAME));
+
+    return sb.toString();
   }
 }
 

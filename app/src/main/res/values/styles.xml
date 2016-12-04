@@ -5,4 +5,13 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="city_textview_style" parent="Widget.AppCompat.ListView">
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_gravity">top</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/forecast_city_textview_height</item>
+        <item name="android:text">Location</item>
+    </style>
+
 </resources>

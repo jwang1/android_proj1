@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.sunshine.app.util.ForecastJsonParser;
@@ -35,6 +36,7 @@ public class ForecastFragment extends Fragment {
 
   //private static final String LOGTAG = ForecastFragment.class.getSimpleName();
   private ListView forecastListView;
+  private TextView cityTextView;
 
   private String city;
 
@@ -79,6 +81,7 @@ public class ForecastFragment extends Fragment {
     city = "25588";
 
     forecastListView = (ListView) rootView.findViewById(R.id.listview_forecast);
+    cityTextView = (TextView) rootView.findViewById(R.id.textView_city);
 
     FetchWeatherTask task = new FetchWeatherTask();
     task.execute(city);
@@ -109,6 +112,9 @@ public class ForecastFragment extends Fragment {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview,
             ForecastJsonParser.getWeatherDataFromJson(weatherResponse));
         forecastListView.setAdapter(arrayAdapter);
+
+        // populate city info
+        cityTextView.setText(ForecastJsonParser.getCity(weatherResponse));
       } catch (JSONException e) {
         e.printStackTrace();
         Log.e(LOGTAG, e.getMessage());
