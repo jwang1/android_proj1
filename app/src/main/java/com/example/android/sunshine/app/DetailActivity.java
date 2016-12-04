@@ -1,12 +1,9 @@
 package com.example.android.sunshine.app;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import java.util.Objects;
 
 /**
  * Forecast Detail Activity class
@@ -24,7 +21,20 @@ public class DetailActivity extends ActionBarActivity {
           .add(R.id.container, new ForecastDetailFragment())
           .commit();
     }
+
+    /*
+       Should go to ForecastDetailFragment class, otherwise, the textView (tv) here will be NULL !
+       because, R.id.detail_textview is defined in fragment_detail.xml inflated by ForecastDetailFragment
+    // Get MainActivity's message via Intent
+    Intent intent = getIntent();
+    String msg = intent.getStringExtra(Intent.EXTRA_TEXT);
+
+    TextView tv = (TextView) findViewById(R.id.detail_textview);
+    tv.setText(msg);
+    */
   }
+
+
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {

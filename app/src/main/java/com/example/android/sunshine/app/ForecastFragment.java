@@ -91,7 +91,8 @@ public class ForecastFragment extends Fragment {
     forecastListView.setOnItemClickListener((adapterView, view, i, l) -> {
       Toast.makeText(getActivity(), "item clicked", Toast.LENGTH_SHORT).show();
       //DetailActivity detailActivity = new DetailActivity();  // wrong way, need to use Intent as shown in below
-      Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
+      Intent detailIntent = new Intent(getActivity(), DetailActivity.class)
+          .putExtra(Intent.EXTRA_TEXT, adapterView.getItemAtPosition(i).toString());
       startActivity(detailIntent);
     });
 
