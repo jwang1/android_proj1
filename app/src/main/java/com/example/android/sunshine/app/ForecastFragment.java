@@ -29,6 +29,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 /**
  * forecast fragment containing a simple view.
@@ -89,7 +90,7 @@ public class ForecastFragment extends Fragment {
     // mentioning "preferences are saved to a file that is accessible from ANYWHERE within the application
     // by calling static method.  Hence did the following; and we default to "Boston" the above.
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-    city = sharedPreferences.getString(getString(R.string.pref_location_key), city);
+    city = sharedPreferences.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
 
     forecastListView = (ListView) rootView.findViewById(R.id.listview_forecast);
     cityTextView = (TextView) rootView.findViewById(R.id.textView_city);
@@ -127,16 +128,24 @@ public class ForecastFragment extends Fragment {
       //Toast.makeText(getActivity(), weatherResponse.toString(), Toast.LENGTH_LONG).show();
 
       // update Adapter data
-      try {
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview,
-            ForecastJsonParser.getWeatherDataFromJson(weatherResponse));
-        forecastListView.setAdapter(arrayAdapter);
+      if (weatherResponse != null && weatherResponse.length() > 0) {
+        try {
+          List<String> forecastData = ForecastJsonParser.getWeatherDataFromJson(weatherResponse);
+          ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview,
+              forecastData);
+          forecastListView.setAdapter(arrayAdapter);
 
-        // populate city info
-        cityTextView.setText(ForecastJsonParser.getCity(weatherResponse));
-      } catch (JSONException e) {
-        e.printStackTrace();
-        Log.e(LOGTAG, e.getMessage());
+          // populate city info
+          cityTextView.setText(ForecastJsonParser.getCity(weatherResponse));
+        } catch (JSONException e) {
+          Toast.makeText(getActivity(), "invalid location : "
+              + PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.pref_location_key), ""), Toast.LENGTH_LONG)
+              .show();
+
+
+          e.printStackTrace();
+          Log.e(LOGTAG, e.getMessage());
+        }
       }
     }
 
