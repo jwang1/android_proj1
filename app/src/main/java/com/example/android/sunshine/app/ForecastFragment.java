@@ -78,6 +78,7 @@ public class ForecastFragment extends Fragment {
       showMap(Uri.parse(ForecastJsonParser.GOOGLE_MAP_URI_PREFIX + ForecastJsonParser.getLonLat()));
       return true;
     }
+
     return super.onOptionsItemSelected(item);
   }
 

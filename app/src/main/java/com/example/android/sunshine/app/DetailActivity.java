@@ -12,6 +12,8 @@ import android.view.MenuItem;
  * Created by jwang on 12/3/16.
  */
 public class DetailActivity extends ActionBarActivity {
+
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -55,5 +57,6 @@ public class DetailActivity extends ActionBarActivity {
 
     return super.onOptionsItemSelected(item);
   }
+
 
 }
